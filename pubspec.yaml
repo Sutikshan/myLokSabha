@@ -1,0 +1,7 @@
+name: sampleWebApp
+description: A sample web application
+dependencies:
+  browser: any
+  google_maps: '>=2.0.0 <3.0.0'
+  js: any
+  json: any

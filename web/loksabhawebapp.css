@@ -1,0 +1,14 @@
+html.body {
+  height: 100%;
+  margin:0;
+}
+
+#map_canvas {
+  height: 100%;
+  margin: 0;
+}
+
+#info_container {
+  left: 90%;
+  top:10%;
+}
