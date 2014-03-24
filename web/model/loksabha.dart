@@ -29,7 +29,7 @@ class LSElectionResult {
   String get ElectionYear => "2009";
   num get ElectionId      =>  15; //matches the indiavotes id - 15 for Loksabha 15 election.
   
-  String get MPDetailUrl => "http://www.myneta.info/ls2009/candidate.php?candidate_id=$WADRId";  
+  String get MPDetailUrl => "http://www.myneta.info/ls2009/candidate.php?candidate_id$WADRId";  
   String get WinnerName => DWIN_NM;
   String get WinnerParty => DWIN_PRT;
   

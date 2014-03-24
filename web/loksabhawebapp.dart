@@ -41,7 +41,7 @@ void drawMap(loksabha) {
 }
 void showWindow(loksabha, position){
   final infowindow = new GoogleMaps.InfoWindow(new GoogleMaps.InfoWindowOptions()
-                    ..content = loksabha.Name
+                    ..content = formatInfoWindowContent(loksabha)
                     ..maxWidth = 200
                   );
                 final marker = new GoogleMaps.Marker(new GoogleMaps.MarkerOptions()
@@ -53,4 +53,20 @@ void showWindow(loksabha, position){
                 infowindow.onCloseclick.listen((data2){
                    marker.map = null;               
                 });  
+}
+String formatInfoWindowContent(loksabha){
+  var lsResult = loksabha.ElectionData[0];
+  return '<div id="content">'
+            '<div id="siteNotice">'
+            '</div>'
+            '<h4 id="firstHeading" class="firstHeading">${loksabha.Name}</h4>'
+            '<div id="bodyContent">'            
+            '<p>Sitting MP Info: <a href="${lsResult.MPDetailUrl}" target="_blank">${lsResult.WinnerName + ' of ' +lsResult.WinnerParty}</a></p>'
+            '<p>Ls2009 Election Detail: <a href="${loksabha.LSDetailUrl}" target="_blank">${loksabha.Name}</a></p>'
+            '<h4>Detail of sitting MP as Declared in 2009 affidavit</h4>'
+            'Assets: ${lsResult.WAssets} <br/>'            
+            'Criminal Cases: ${lsResult.wCrimeCases} <br/>'
+            'Education: ${lsResult.WEdu} <br/>'
+            '</div>'
+            '</div>';
 }
