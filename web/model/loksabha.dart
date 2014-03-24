@@ -67,6 +67,8 @@ class LS2009Results {
           lokSabha.Coordinates.add(new GoogleMaps.LatLng(coord[1], coord[0]));
         }
       }
+    } else {
+      print ("something wrong with " + lokSabha.DPC_NM  );
     }
     lokSabha.ElectionData = new List<LSElectionResult> ();
     LSElectionResult ls2009 = new LSElectionResult();
@@ -96,16 +98,16 @@ class LS2009Results {
                 allLokSabha.putIfAbsent(pcProperties["DPC_NM"], () => loadLokSabhaData(pcProperties, pcGeometry));
         }
       }
-        loadADRData(drawMap);
-      
+        loadADRData(drawMap);      
     });
   }
-
+var totalAdr = 0;
   void loadADRData(drawMap){
   HttpRequest.getString('/loksabhaWebApp/data/winner2009.json').then((String jsonData){
     final winnerData = parse (jsonData);
         for (var mp in winnerData) {
           LokSabha ls = allLokSabha[mp["cty"]];
+          totalAdr += 1;
           if (ls != null) {
             LSElectionResult lsElectionResult =  ls.ElectionData[0];
             lsElectionResult.WADRId = mp["id"];
@@ -119,7 +121,8 @@ class LS2009Results {
             print (mp["cty"] + "--> Detail not found in indiavotes.in");
           }
           drawMap(ls);
-        } 
+        }
+        print (totalAdr);
   });  
   }
 }

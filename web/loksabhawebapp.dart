@@ -5,8 +5,7 @@ import 'model/loksabha.dart';
 GoogleMaps.GMap map;
 final LS2009Results ls2009 = new LS2009Results();
 final GoogleMaps.LatLng nagpur = new GoogleMaps.LatLng(21.21235, 79.10517);
-//final GoogleMaps.LatLng Lakshdweep = new GoogleMaps.LatLng(10.5700, 72.6300);
-var cname;
+
 void main() {
   final mapOptions = new GoogleMaps.MapOptions()
     ..zoom =6
@@ -14,55 +13,44 @@ void main() {
     ..mapTypeId = GoogleMaps.MapTypeId.ROADMAP
     ;
   map = new GoogleMaps.GMap(querySelector("#map_canvas"), mapOptions);
-  ls2009.loadConstituencies(drawMap);
-  //loadContents();
-  //print ("success");
+  ls2009.loadConstituencies(drawMap);  
 }
 
-GoogleMaps.InfoWindow infoWindow = new GoogleMaps.InfoWindow();
-void drawMap(loksabha){
-  
-  var criminalCount = 0;
+void drawMap(loksabha) {
   // Construct the polygon.
            var constPolygonOptions = new GoogleMaps.PolygonOptions()
              ..paths=loksabha.Coordinates 
              ..strokeColor = '#FF0000'
-             ..strokeOpacity = 0.8
+             ..strokeOpacity = 1
              ..strokeWeight = 1
              ..fillColor = '#00FF00'
              ..fillOpacity = 0.35
              ..clickable=true
              ..map=map           
-           ;
-           constPolygonOptions.fillColor = '#00FF00';
+           ;           
            if (loksabha.ElectionData == null || loksabha.ElectionData.length == 0){
-             constPolygonOptions.fillColor = '#0000FF';  
+             constPolygonOptions.fillColor = '#0000FF';           
            }
            else if (loksabha.ElectionData[0].wCrimeCases != null && int.parse(loksabha.ElectionData[0].wCrimeCases) > 0) {
-                constPolygonOptions.fillColor = '#FF0000';
-                criminalCount = criminalCount+1;
-              } else {
-                constPolygonOptions.fillColor = '#00FF00';           
-              }
+                constPolygonOptions.fillColor = '#FF0000';                
+              } 
             var constPolygon = new GoogleMaps.Polygon(constPolygonOptions);
-            constPolygon.onClick.listen((data){
-             print(data);
-           
-              infoWindow.content = contentString;
-              infoWindow.open(map, constPolygon);
-              //print(data);        
+            constPolygon.onClick.listen((clickData){
+              showWindow(loksabha, clickData.latLng);              
           });
 }
-void loadContents(){
-  for (var key in ls2009.allLokSabha.keys){
-    drawMap(key);  
-  }
-  
-  
-      }
-var contentString = """<div id="content">
-      <div id="siteNotice">
-      </div>
-      <h4 id="firstHeading" class="firstHeading">${cname}</h4>
-      <div id="bodyContent">
-      </div>""";
+void showWindow(loksabha, position){
+  final infowindow = new GoogleMaps.InfoWindow(new GoogleMaps.InfoWindowOptions()
+                    ..content = loksabha.Name
+                    ..maxWidth = 200
+                  );
+                final marker = new GoogleMaps.Marker(new GoogleMaps.MarkerOptions()
+                   ..position = position
+                   ..map = map
+                   ..title = loksabha.Name
+                 );
+                infowindow.open(map, marker);
+                infowindow.onCloseclick.listen((data2){
+                   marker.map = null;               
+                });  
+}
